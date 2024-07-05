@@ -7,6 +7,7 @@ import io.com.github.eduardoconceicao90.junit5_mockito_api.service.UserService;
 import io.com.github.eduardoconceicao90.junit5_mockito_api.service.exception.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDTO obj) {
+        findByEmail(obj);
         return userRepository.save(mapper.map(obj, User.class));
+    }
+
+    // -----------------------------------------
+
+    // Busca user pelo email
+    private void findByEmail(UserDTO obj) {
+        Optional<User> user = userRepository.findByEmail(obj.getEmail());
+        if(user.isPresent()) {
+            throw new DataIntegrityViolationException("Email já cadastrado!");
+        }
     }
 
 }
