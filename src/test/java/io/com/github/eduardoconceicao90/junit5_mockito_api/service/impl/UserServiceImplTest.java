@@ -143,7 +143,11 @@ class UserServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteWithSuccess() {
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+        Mockito.doNothing().when(userRepository).deleteById(Mockito.anyInt());
+        userService.delete(ID);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
     }
 
     private void startUser(){
