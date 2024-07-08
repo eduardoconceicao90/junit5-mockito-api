@@ -19,9 +19,9 @@ class ApplicationControllerAdviceTest {
     }
 
     @Test
-    void objectNotFound() {
+    void handleObjectNotFound() {
         ApiErrors response =
-                applicationControllerAdvice.objectNotFound(new ObjectNotFoundException("Objeto não encontrado"));
+                applicationControllerAdvice.handleObjectNotFound(new ObjectNotFoundException("Objeto não encontrado"));
 
         Assertions.assertNotNull(response);
     }

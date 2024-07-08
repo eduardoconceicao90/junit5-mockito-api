@@ -26,7 +26,7 @@ public class ApplicationControllerAdvice {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiErrors objectNotFound(ObjectNotFoundException ex){
+    public ApiErrors handleObjectNotFound(ObjectNotFoundException ex){
         String mensagemErro = ex.getMessage();
         return new ApiErrors(mensagemErro);
     }
