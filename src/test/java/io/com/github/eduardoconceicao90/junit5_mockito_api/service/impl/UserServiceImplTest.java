@@ -150,6 +150,18 @@ class UserServiceImplTest {
         Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
     }
 
+    @Test
+    void deleteWithObjectNotFoundException() {
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+
+        try{
+            userService.delete(ID);
+        } catch (Exception e){
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Objeto não encontrado", e.getMessage());
+        }
+    }
+
     private void startUser(){
         user = new User(ID, NAME, EMAIL, PASSWORD);
         userDTO = new UserDTO(ID, NAME, EMAIL, PASSWORD);
