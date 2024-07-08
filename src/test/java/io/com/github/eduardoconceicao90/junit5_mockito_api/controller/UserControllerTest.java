@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -113,7 +114,15 @@ class UserControllerTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSuccess() {
+        Mockito.doNothing().when(userService).delete(Mockito.anyInt());
+
+        ResponseEntity<UserDTO> response = userController.delete(ID);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Mockito.verify(userService, Mockito.times(1)).delete(Mockito.anyInt());
     }
 
     private void startUser(){
