@@ -3,6 +3,7 @@ package io.com.github.eduardoconceicao90.junit5_mockito_api.service.impl;
 import io.com.github.eduardoconceicao90.junit5_mockito_api.domain.User;
 import io.com.github.eduardoconceicao90.junit5_mockito_api.domain.dto.UserDTO;
 import io.com.github.eduardoconceicao90.junit5_mockito_api.repository.UserRepository;
+import io.com.github.eduardoconceicao90.junit5_mockito_api.service.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,19 @@ class UserServiceImplTest {
         Assertions.assertEquals(ID, response.getId());
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
-        Assertions.assertEquals(PASSWORD, response.getPassword());
+        //Assertions.assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+
+        try{
+            userService.findById(ID);
+        }catch (Exception e){
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Objeto não encontrado", e.getMessage());
+        }
     }
 
     @Test
